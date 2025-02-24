@@ -2,6 +2,7 @@
 import { FaSearch, FaBell, FaUser, FaBars} from "react-icons/fa";
 import { getAuth, signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import Link from "next/link";
 
 const FindFriends = () => {
   const signOutFunc = () =>{
@@ -17,7 +18,7 @@ const FindFriends = () => {
       <nav className="flex justify-between items-center px-8 py-4">
         {/* Logo Section */}
         <div className="flex items-center space-x-2">
-          <img src="Type=Logo Default, Component=Logo.svg" alt="Quizzo Logo" />
+          <img src="Type=Logo Default, Component=Logo.svg" />
           <span className="text-black font-bold text-lg">Quizzo</span>
         </div>
 
@@ -46,9 +47,11 @@ const FindFriends = () => {
             <p className="text-lg text-white font-semibold mb-4">
               Play quiz together with <br /> your friends now!
             </p>
+            <Link href="/dashboard/findFriends">
             <button className="bg-white text-purple-600 px-4 py-2 rounded-full mt-4">
               Find Friends
             </button>
+            </Link>
           </div>
 
           {/* Right Side: Scattered Icons */}

@@ -18,56 +18,70 @@ export default function Page() {
         title: "",
         image: "",
         description: "",
+        userId: "" // Ensure this exists to avoid undefined errors
     });
 
-    const [questions, setQuestions] = useState([]); // Store fetched questions
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // Track current question
-    const [userAnswers, setUserAnswers] = useState({}); // Store user-selected answers
+    const [isCreator, setIsCreator] = useState(false);
+    const [questions, setQuestions] = useState([]);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [userAnswers, setUserAnswers] = useState({});
     const [showResults, setShowResults] = useState(false);
+    const [score, setScore] = useState(0);
 
     // Fetch Quiz Details
-    const fetchQuizDetails = async () => {
-        try {
-            const docRef = doc(db, "quizzes", id);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setQuizDetails(docSnap.data());
-            } else {
-                console.log("Quiz not found");
-            }
-        } catch (error) {
-            console.error("Error fetching quiz details:", error);
-        }
-    };
-
-    // Fetch Quiz Questions
-    const fetchQuizQuestions = async () => {
-        try {
-            const q = query(
-                collection(db, "questions"),
-                where("quizId", "==", id),
-                where("userId", "==", userId)
-            );
-
-            const querySnapshot = await getDocs(q);
-            const questionsArray = [];
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const optionsArray = [data.option1, data.option2, data.option3, data.option4];
-                questionsArray.push({ id: doc.id, ...data, options: optionsArray });
-            });
-
-            setQuestions(questionsArray); // Set fetched questions
-        } catch (error) {
-            console.error("Error fetching questions:", error);
-        }
-    };
-
     useEffect(() => {
         if (!id || !userId) return;
+
+        const fetchQuizDetails = async () => {
+            try {
+                const docRef = doc(db, "quizzes", id);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const quizData = docSnap.data();
+                    setQuizDetails(quizData);
+
+                    // Set creator check
+                    setIsCreator(quizData.userId === userId);
+
+                    console.log("Quiz userId:", quizData.userId);
+                    console.log("Current User ID:", userId);
+                } else {
+                    console.log("Quiz not found");
+                }
+            } catch (error) {
+                console.error("Error fetching quiz details:", error);
+            }
+        };
+
         fetchQuizDetails();
-        fetchQuizQuestions();
     }, [id, userId]);
+
+    // Fetch Quiz Questions
+    useEffect(() => {
+        if (!id) return;
+
+        const fetchQuizQuestions = async () => {
+            try {
+                const q = query(collection(db, "questions"), where("quizId", "==", id));
+                const querySnapshot = await getDocs(q);
+                const questionsArray = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        ...data,
+                        options: [data.option1, data.option2, data.option3, data.option4].filter(Boolean)
+                    };
+                });
+
+                setQuestions(questionsArray);
+                console.log("Fetched questions:", questionsArray);
+            } catch (error) {
+                console.error("Error fetching questions:", error);
+            }
+        };
+
+        fetchQuizQuestions();
+    }, [id]);
 
     // Handle answer selection
     const handleAnswerChange = (questionId, selectedOption) => {
@@ -82,23 +96,37 @@ export default function Page() {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
+            calculateScore();
             setShowResults(true);
         }
     };
+    const calculateScore = () =>{
+        let totalScore = 0;
+        questions.forEach((q) =>{
+            if (userAnswers[q.id] === q.correctAnswer) {
+                totalScore += 1;
+            }
+        })
+        setScore(totalScore);
+    }
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
             <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg text-center">
-            <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold text-gray-800 capitalize">
                         {quizDetails.title}
                     </h1>
-                    <button
-                        onClick={() => router.push(`/dashboard/quiz/${id}/question`)}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
-                    >
-                        Add Question
-                    </button>
+                    
+                    {/* Show button only if user is the creator */}
+                    {isCreator && (
+                        <button
+                            onClick={() => router.push(`/dashboard/quiz/${id}/question`)}
+                            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition"
+                        >
+                            Add Question
+                        </button>
+                    )}
                 </div>
 
                 <img
@@ -115,7 +143,7 @@ export default function Page() {
 
                 <div className="mt-6 text-left">
                     <h2 className="text-xl font-semibold text-black">Questions</h2>
-                    
+
                     {!showResults ? (
                         <>
                             <div className="mt-4 p-4 rounded-lg">
@@ -152,6 +180,7 @@ export default function Page() {
                     ) : (
                         <div className="mt-6">
                             <h2 className="text-xl font-semibold text-black">Results</h2>
+                            <p className="text-xl font-bold text-green-600">Score: {score} / {questions.length}</p>
                             {questions.map((q) => (
                                 <div
                                     key={q.id}

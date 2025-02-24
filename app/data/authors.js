@@ -1,4 +1,4 @@
-
+/* 
 const authors = [
     { id: 1, image: 'Ellipse.png', name: 'Rayford' },
     { id: 2, image: 'Ellipse (1).png', name: 'Willard' },
@@ -6,4 +6,4 @@ const authors = [
     { id: 4, image: 'Ellipse (3).png', name: 'Geoffrey' },
 ];
 
-export default authors;
+export default authors; */
