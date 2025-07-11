@@ -62,7 +62,8 @@ export default function Page() {
 
         const fetchQuizQuestions = async () => {
             try {
-                const q = query(collection(db, "questions"), where("quizId", "==", id));
+                const q = query(collection(db, "questions"), 
+                where("quizId", "==", id));
                 const querySnapshot = await getDocs(q);
                 const questionsArray = querySnapshot.docs.map(doc => {
                     const data = doc.data();
@@ -179,8 +180,10 @@ export default function Page() {
                         </>
                     ) : (
                         <div className="mt-6">
+                            <div className="flex justify-between items-center">
                             <h2 className="text-xl font-semibold text-black">Results</h2>
-                            <p className="text-xl font-bold text-green-600">Score: {score} / {questions.length}</p>
+                            <p className="text-xl font-bold text-green-600"> {score} / {questions.length}</p>
+                            </div>
                             {questions.map((q) => (
                                 <div
                                     key={q.id}

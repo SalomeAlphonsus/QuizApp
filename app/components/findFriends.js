@@ -13,9 +13,9 @@ const FindFriends = () => {
     });
   }
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100">
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-8 py-4">
+      <nav className="flex justify-between items-center  md:px-8 py-4">
         {/* Logo Section */}
         <div className="flex items-center space-x-2">
           <img src="Type=Logo Default, Component=Logo.svg" />
@@ -24,10 +24,10 @@ const FindFriends = () => {
 
         {/* Icons Section */}
         <div className="flex items-center gap-4">
-        <div className="flex items-center space-x-6">
+        
           <FaSearch className="text-black w-5 h-5 cursor-pointer" />
           <FaBell className="text-black w-5 h-5 cursor-pointer" />
-        </div>
+       
 
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className=" m-1"><FaBars className="text-white w-5 h-5 cursor-pointer" color="black"/></div>
@@ -40,7 +40,7 @@ const FindFriends = () => {
       </nav>
 
       {/* Header Section */}
-      <header className="w-full max-w-lg bg-gradient-to-r from-[#6949FF] to-[#876DFF] p-10 rounded-xl shadow-lg relative mt-10 lg:left-9 left-0">
+      <header className="w-full max-w-lg bg-gradient-to-r from-[#6949FF] to-[#876DFF] p-6 md:p-10 rounded-xl shadow-lg relative mt-10 lg:left-9 left-0">
         <div className="flex justify-between">
           {/* Left Side: Text and Button */}
           <div>

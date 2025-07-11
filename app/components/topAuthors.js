@@ -28,14 +28,14 @@ const TopAuthors = () => {
     }, []);
 
     return (
-        <div className="relative lg:bottom-32 bottom-0">
-            <div className="flex justify-between items-center mb-6 px-10">
+        <div className=" px-4 md:px-10 py-4 md:py-8 my-8">
+            <div className="flex justify-between items-center mb-6 mt-14">
                 <h2 className="text-2xl font-bold text-black">Top Authors</h2>
                 <Link href="/dashboard/findFriends" className="text-primary text-sm hover:underline">
                     View all →
                 </Link>
             </div>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 object-cover">
                 {users.map((user) => (
                     <Card key={user.id} image={user.image} name={user.name} />
                 ))}

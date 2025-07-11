@@ -53,7 +53,7 @@ const ProfileForm = () => {
     }
 
     return (
-        <div className="flex items-center justify-center ">{errorMsg !== '' &&
+        <div className="flex items-center justify-center px-5">{errorMsg !== '' &&
             <div role="alert" className="alert alert-info absolute top-5 right-5 max-w-xs">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -76,9 +76,9 @@ const ProfileForm = () => {
                     <FaArrowLeft className="w-6 h-6 text-black" />
                     <progress className="progress progress-primary w-56 mt-2" value="70" max="100"></progress>
                 </div>
-                <h2 className="text-3xl font-bold text-center mb-6 text-black">Create an Account</h2>
-                <p className="text-gray-800 text-center text-md">Please complete your profile</p>
-                <p className="text-gray-800 text-center max-w-sm text-md mb-4">Don't worry, your data will remain private and only you can see it</p>
+                <h2 className="text-xl md:text-2xl font-bold text-center mb-2 mt-1 text-black">Create an Account</h2>
+                <p className="text-gray-800 text-center text-sm">Please complete your profile</p>
+                <p className="text-gray-800 text-center max-w-sm text-sm mb-4">Don't worry, your data will remain private and only you can see it</p>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-black">
